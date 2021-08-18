@@ -16,7 +16,6 @@ export default function reduce(state, action) {
         current: action.payload,
       };
     case UNDO:
-      console.log('happy');
       return {
         ...state,
         after: [state.current, ...state.after],
