@@ -1,37 +1,20 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
+import PropTypes from 'prop-types';
+import reducer from '../../state/reducer';
+import { undoAction, redoAction, recordAction } from '../../actions/actions';
 
-const useRecord = (init) => {
-  const [before, setBefore] = useState([]);
-  const [current, setCurrent] = useState(init);
-  const [after, setAfter] = useState([]);
-
+function App({ initialState }) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { current } = state;
   const undo = () => {
-    setAfter((after) => [current, ...after]);
-    setCurrent(before[before.length - 1]);
-    setBefore((before) => before.slice(0, -1));
+    dispatch(undoAction());
   };
-
   const redo = () => {
-    setBefore((before) => [...before, current]);
-    setCurrent(after[0]);
-    setAfter((after) => after.slice(1));
+    dispatch(redoAction());
   };
-
-  const record = (val) => {
-    setBefore((before) => [...before, current]);
-    setCurrent(val);
+  const record = (value) => {
+    dispatch(recordAction(value));
   };
-
-  return {
-    undo,
-    record,
-    redo,
-    current,
-  };
-};
-
-function App() {
-  const { current, undo, redo, record } = useRecord('#FF0000');
 
   return (
     <>
@@ -52,3 +35,7 @@ function App() {
 }
 
 export default App;
+
+App.propTypes = {
+  initialState: PropTypes.object.isRequired
+};
