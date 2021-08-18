@@ -7,6 +7,7 @@ export const initialState = {
 };
 
 export default function reduce(state, action) {
+  // eslint-disable-next-line keyword-spacing
   switch (action.type) {
     case RECORD:
       return {
@@ -15,6 +16,7 @@ export default function reduce(state, action) {
         current: action.payload,
       };
     case UNDO:
+      console.log('happy');
       return {
         ...state,
         after: [state.current, ...state.after],
